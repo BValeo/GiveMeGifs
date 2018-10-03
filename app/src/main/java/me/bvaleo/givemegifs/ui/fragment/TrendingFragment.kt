@@ -9,23 +9,23 @@ import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import dagger.android.support.DaggerFragment
 import me.bvaleo.givemegifs.R
 import me.bvaleo.givemegifs.databinding.FragmentTrendingBinding
 import me.bvaleo.givemegifs.model.ResponseGif
 import me.bvaleo.givemegifs.ui.adapter.GifAdapter
+import me.bvaleo.givemegifs.ui.adapter.RecyclerTouchListener
 import me.bvaleo.givemegifs.util.Constants
 import me.bvaleo.givemegifs.util.getViewModel
+import me.bvaleo.givemegifs.util.toast
 import me.bvaleo.givemegifs.viewmodel.MainViewModel
 import javax.inject.Inject
 
 
-class TrendingFragment : DaggerFragment() {
+class TrendingFragment : DaggerFragment(), RecyclerTouchListener.ClickListener {
 
     @Inject lateinit var mFactory: ViewModelProvider.Factory
 
@@ -76,6 +76,7 @@ class TrendingFragment : DaggerFragment() {
             adapter = mAdapter
             layoutManager = mLayoutManager
 
+            addOnItemTouchListener(RecyclerTouchListener(context, this, this@TrendingFragment))
             setOnScrollChangeListener{ view, _, _, _, _ ->
                 val rv = view as RecyclerView
                 val layoutManager = rv.layoutManager as LinearLayoutManager
@@ -86,5 +87,14 @@ class TrendingFragment : DaggerFragment() {
                 }
             }
         }
+    }
+
+    override fun onClick(view: View, position: Int) {
+        val gif = mAdapter.getItem(position)
+        toast(gif.images.info.url)
+    }
+
+    override fun onLongClick(view: View?, position: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

@@ -3,8 +3,10 @@ package me.bvaleo.givemegifs.ui.adapter
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import me.bvaleo.givemegifs.databinding.ListGifItemBinding
 import me.bvaleo.givemegifs.model.ResponseGif
 
@@ -28,9 +30,7 @@ class GifAdapter(private var gifList: MutableList<ResponseGif>) : RecyclerView.A
         holder.bind(gifList[position])
     }
 
-    interface OnItemClickListener {
-        fun onClick(view: View, data: ResponseGif)
-    }
+    fun getItem(position: Int) = gifList[position]
 
     fun addData(data: MutableList<ResponseGif>){
         Log.d("AdapterGif", "AddData")
