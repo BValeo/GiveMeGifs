@@ -1,4 +1,4 @@
-package me.bvaleo.givemegifs.util.di
+package me.bvaleo.givemegifs.util
 
 import android.databinding.BindingAdapter
 import android.net.Uri
@@ -11,5 +11,4 @@ fun loadImage(view: ImageView, url: String) {
             .asGif()
             .load(Uri.parse(url))
             .into(view)
-
 }

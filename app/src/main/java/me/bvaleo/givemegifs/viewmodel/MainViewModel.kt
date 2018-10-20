@@ -25,6 +25,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
     private var paginationSearch: Int = 0
 
     private val disposable: CompositeDisposable = CompositeDisposable()
+
     private val trend: MutableLiveData<MutableList<ResponseGif>> = MutableLiveData()
     private val search: MutableLiveData<MutableList<ResponseGif>> = MutableLiveData()
 
@@ -35,9 +36,12 @@ class MainViewModel @Inject constructor() : ViewModel() {
     fun getTrending() : MutableLiveData<MutableList<ResponseGif>> = trend
     fun getSearching() : MutableLiveData<MutableList<ResponseGif>> = search
 
+    private var curruntQuery: String = ""
+
 
     fun getGifs(query: String? = null) {
         query?.let {
+            if (curruntQuery != query) {paginationSearch = 0; curruntQuery = query}
             getGifsByQuery(it)
             return
         }
@@ -77,10 +81,6 @@ class MainViewModel @Inject constructor() : ViewModel() {
                         },{
                             Log.e("Error", "Loading gifs failed (search)", it)
                         }))
-    }
-
-    fun onFinishSearch() {
-        paginationSearch = 0
     }
 
     fun onSaveData(_data: MutableList<ResponseGif>) = data.addAll(_data)

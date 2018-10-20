@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.bumptech.glide.load.resource.gif.GifDrawable
 import me.bvaleo.givemegifs.databinding.ListGifItemBinding
 import me.bvaleo.givemegifs.model.ResponseGif
 

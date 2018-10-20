@@ -3,6 +3,7 @@ package me.bvaleo.givemegifs.ui.fragment
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -12,6 +13,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import com.bumptech.glide.load.resource.gif.GifDrawable
 import dagger.android.support.DaggerFragment
 import me.bvaleo.givemegifs.R
 import me.bvaleo.givemegifs.databinding.FragmentTrendingBinding
@@ -35,12 +38,14 @@ class TrendingFragment : DaggerFragment(), RecyclerTouchListener.ClickListener {
     private lateinit var mLayoutManager: LinearLayoutManager
     private lateinit var mAdapter: GifAdapter
 
-
+    companion object Const {
+        const val LIST_STATE = "state_of_list"
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBind = DataBindingUtil.inflate(inflater, R.layout.fragment_trending, container, false)
         mVModel = getViewModel(activity!!, mFactory)
-        initRV()
+        initView()
 
         mLData = mVModel.getTrending()
         mLData.observe(this, Observer<MutableList<ResponseGif>> { it?.let { mAdapter.addData(it)} })
@@ -53,19 +58,18 @@ class TrendingFragment : DaggerFragment(), RecyclerTouchListener.ClickListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         mVModel.onSaveData(mAdapter.saveData())
-        outState.putParcelable(Constants.LIST_STATE, mLayoutManager.onSaveInstanceState())
+        outState.putParcelable(LIST_STATE, mLayoutManager.onSaveInstanceState())
         super.onSaveInstanceState(outState)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         savedInstanceState?.let {
-            mLayoutManager.onRestoreInstanceState(it.getParcelable(Constants.LIST_STATE))
+            mLayoutManager.onRestoreInstanceState(it.getParcelable(LIST_STATE))
         }
     }
 
-    private fun initRV() {
-
+    private fun initView() {
         mLayoutManager = if (activity?.resources?.configuration?.orientation == Configuration.ORIENTATION_PORTRAIT)
             LinearLayoutManager(context)
         else
@@ -87,6 +91,13 @@ class TrendingFragment : DaggerFragment(), RecyclerTouchListener.ClickListener {
                 }
             }
         }
+
+        mBind.fab.setOnClickListener{
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.container, SearchFragment())
+                    ?.addToBackStack("Search")
+                    ?.commit()
+        }
     }
 
     override fun onClick(view: View, position: Int) {
@@ -95,6 +106,6 @@ class TrendingFragment : DaggerFragment(), RecyclerTouchListener.ClickListener {
     }
 
     override fun onLongClick(view: View?, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        toast(position.toString())
     }
 }

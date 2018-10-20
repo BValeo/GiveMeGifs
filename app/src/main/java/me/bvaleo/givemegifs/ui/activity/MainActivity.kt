@@ -15,7 +15,6 @@ class MainActivity : DaggerAppCompatActivity() {
         if(savedInstanceState == null) {
             with(supportFragmentManager.beginTransaction()) {
                 add(R.id.container, TrendingFragment(), "TrendingFragment")
-                addToBackStack("TrendingFragment")
                 commit()
             }
         }

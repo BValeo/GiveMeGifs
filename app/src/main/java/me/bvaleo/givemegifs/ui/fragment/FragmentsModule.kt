@@ -8,4 +8,7 @@ import dagger.android.ContributesAndroidInjector
 internal abstract class FragmentsModule {
     @ContributesAndroidInjector
     internal abstract fun contributeTrendigFragment(): TrendingFragment
+
+    @ContributesAndroidInjector
+    internal abstract fun contributeSearchFragment(): SearchFragment
 }
